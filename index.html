@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portofolio - Muhammad Ilham Jagad</title>
+    <title>Muhammad Ilham Jagad - Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -11,40 +12,45 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --dark: #1a1a2e;
+            --light: #f5f7fa;
+            --accent: #ff6b6b;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: #333;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            background: var(--light);
+            overflow-x: hidden;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        /* Navigation */
+        /* Navbar */
         nav {
             background: rgba(255, 255, 255, 0.95);
             padding: 1rem 0;
-            position: sticky;
+            position: fixed;
             top: 0;
-            z-index: 100;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
         }
 
         nav .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-        }
-
-        nav .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #667eea;
         }
 
         nav .logo img {
@@ -52,7 +58,12 @@
             height: 50px;
             border-radius: 50%;
             object-fit: cover;
-            border: 2px solid #667eea;
+            border: 3px solid var(--primary);
+            transition: transform 0.3s;
+        }
+
+        nav .logo img:hover {
+            transform: scale(1.1) rotate(5deg);
         }
 
         nav ul {
@@ -64,112 +75,204 @@
         nav a {
             text-decoration: none;
             color: #333;
-            transition: color 0.3s;
+            font-weight: 500;
+            transition: all 0.3s;
+            position: relative;
         }
 
-        nav a:hover {
-            color: #667eea;
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
         }
 
         /* Hero Section */
         .hero {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 80vh;
-            text-align: center;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             color: white;
-            padding: 2rem;
+            padding: 150px 20px 100px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            margin-top: 70px;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></pattern></defs><rect width="1200" height="600" fill="url(%23grid)"/></svg>');
+            opacity: 0.5;
         }
 
         .hero-content {
-            animation: fadeInUp 1s ease-out;
+            position: relative;
+            z-index: 1;
+            animation: slideInUp 1s ease-out;
         }
 
         .hero h1 {
-            font-size: 3.5rem;
+            font-size: 4rem;
             margin-bottom: 1rem;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            font-weight: 800;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            animation: fadeInDown 1s ease-out;
         }
 
         .hero .subtitle {
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             margin-bottom: 2rem;
-            opacity: 0.9;
+            opacity: 0.95;
+            animation: fadeInUp 1s ease-out 0.2s both;
         }
 
-        .roles {
+        .roles-container {
             display: flex;
             justify-content: center;
             gap: 1rem;
             flex-wrap: wrap;
             margin-bottom: 2rem;
+            animation: fadeInUp 1s ease-out 0.4s both;
         }
 
         .role-badge {
             background: rgba(255, 255, 255, 0.2);
-            padding: 0.5rem 1.5rem;
+            padding: 0.7rem 1.5rem;
             border-radius: 50px;
             border: 2px solid rgba(255, 255, 255, 0.5);
             font-size: 1rem;
             backdrop-filter: blur(10px);
             transition: all 0.3s;
+            cursor: pointer;
         }
 
         .role-badge:hover {
             background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px);
+            transform: translateY(-5px);
+            border-color: rgba(255, 255, 255, 0.8);
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: white;
+            color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            color: var(--primary);
         }
 
         /* Social Links */
         .social-links {
             display: flex;
             justify-content: center;
-            gap: 2rem;
+            gap: 1.5rem;
             margin-top: 2rem;
+            animation: fadeInUp 1s ease-out 0.8s both;
         }
 
         .social-link {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 60px;
-            height: 60px;
+            width: 55px;
+            height: 55px;
             background: rgba(255, 255, 255, 0.2);
             border-radius: 50%;
             text-decoration: none;
             color: white;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             transition: all 0.3s;
             border: 2px solid rgba(255, 255, 255, 0.3);
         }
 
         .social-link:hover {
-            background: rgba(255, 255, 255, 0.4);
-            transform: translateY(-5px);
-            border-color: rgba(255, 255, 255, 0.6);
+            background: white;
+            color: var(--primary);
+            transform: translateY(-8px) rotate(10deg);
+            border-color: white;
         }
 
         /* About Section */
         .about {
+            padding: 80px 20px;
             background: white;
-            padding: 4rem 2rem;
-            margin: 2rem 0;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
 
-        .about h2 {
+        .section-title {
             font-size: 2.5rem;
-            margin-bottom: 1.5rem;
-            color: #667eea;
+            margin-bottom: 3rem;
             text-align: center;
+            color: var(--dark);
+            position: relative;
+            padding-bottom: 1rem;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 2px;
         }
 
         .about-content {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 2rem;
+            gap: 3rem;
             align-items: center;
         }
 
@@ -179,69 +282,159 @@
             color: #555;
         }
 
-        .skills {
+        .about-text p {
+            margin-bottom: 1rem;
+        }
+
+        .skills-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 1rem;
         }
 
-        .skill-item {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        .skill-card {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             color: white;
-            padding: 1rem;
-            border-radius: 8px;
+            padding: 1.5rem;
+            border-radius: 10px;
             text-align: center;
             font-weight: 600;
-            transition: transform 0.3s;
+            transition: all 0.3s;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
         }
 
-        .skill-item:hover {
-            transform: translateY(-5px);
+        .skill-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Projects Section */
+        .projects {
+            padding: 80px 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .project-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .project-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: left 0.5s;
+        }
+
+        .project-card:hover .project-image::after {
+            left: 100%;
+        }
+
+        .project-content {
+            padding: 1.5rem;
+        }
+
+        .project-content h3 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 1.3rem;
+        }
+
+        .project-content p {
+            color: #666;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .project-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background: var(--light);
+            color: var(--primary);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
         }
 
         /* Services Section */
         .services {
-            padding: 4rem 2rem;
-            margin: 2rem 0;
-        }
-
-        .services h2 {
-            font-size: 2.5rem;
-            margin-bottom: 3rem;
-            color: white;
-            text-align: center;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            padding: 80px 20px;
+            background: white;
         }
 
         .services-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 2rem;
         }
 
         .service-card {
             background: white;
             padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
             text-align: center;
             transition: all 0.3s;
+            border: 2px solid transparent;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
         }
 
         .service-card:hover {
+            border-color: var(--primary);
             transform: translateY(-10px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.2);
         }
 
         .service-icon {
             font-size: 3rem;
             margin-bottom: 1rem;
+            transition: transform 0.3s;
+        }
+
+        .service-card:hover .service-icon {
+            transform: scale(1.2) rotate(10deg);
         }
 
         .service-card h3 {
-            font-size: 1.5rem;
+            color: var(--primary);
             margin-bottom: 1rem;
-            color: #667eea;
+            font-size: 1.3rem;
         }
 
         .service-card p {
@@ -251,60 +444,65 @@
 
         /* Contact Section */
         .contact {
-            background: white;
-            padding: 4rem 2rem;
-            margin: 2rem 0;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            padding: 80px 20px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
             text-align: center;
         }
 
         .contact h2 {
-            font-size: 2.5rem;
+            color: white;
             margin-bottom: 2rem;
-            color: #667eea;
         }
 
         .contact-info {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 2rem;
-            margin-bottom: 2rem;
+            margin-bottom: 3rem;
         }
 
         .contact-item {
-            padding: 1.5rem;
-            background: #f8f9fa;
-            border-radius: 8px;
-            border-left: 4px solid #667eea;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s;
+        }
+
+        .contact-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-5px);
         }
 
         .contact-item h3 {
-            color: #667eea;
             margin-bottom: 0.5rem;
+            font-size: 1.1rem;
         }
 
         .contact-item a {
-            color: #764ba2;
+            color: white;
             text-decoration: none;
-            transition: color 0.3s;
+            transition: all 0.3s;
+            font-weight: 500;
         }
 
         .contact-item a:hover {
-            color: #667eea;
+            text-decoration: underline;
+            opacity: 0.8;
         }
 
         /* Footer */
         footer {
-            background: rgba(0, 0, 0, 0.8);
+            background: var(--dark);
             color: white;
             text-align: center;
             padding: 2rem;
-            margin-top: 2rem;
         }
 
         /* Animations */
-        @keyframes fadeInUp {
+        @keyframes slideInUp {
             from {
                 opacity: 0;
                 transform: translateY(30px);
@@ -315,6 +513,40 @@
             }
         }
 
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Scroll Animation */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease-out;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             nav ul {
@@ -323,41 +555,78 @@
             }
 
             .hero h1 {
-                font-size: 2rem;
+                font-size: 2.5rem;
             }
 
             .hero .subtitle {
-                font-size: 1.1rem;
+                font-size: 1rem;
             }
 
             .about-content {
                 grid-template-columns: 1fr;
             }
 
-            .skills {
+            .skills-grid {
                 grid-template-columns: 1fr;
             }
 
-            .social-links {
-                gap: 1rem;
+            .cta-buttons {
+                flex-direction: column;
             }
 
-            .social-link {
-                width: 50px;
-                height: 50px;
-                font-size: 1.2rem;
+            .btn {
+                width: 100%;
             }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .hero {
+                padding: 120px 20px 80px;
+            }
+        }
+
+        /* Scroll to top button */
+        .scroll-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            z-index: 999;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .scroll-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.6);
+        }
+
+        .scroll-top.show {
+            display: flex;
         }
     </style>
 </head>
 <body>
-    <!-- Navigation -->
+    <!-- Navbar -->
     <nav>
         <div class="container">
             <div class="logo"><img src="profile.jpeg" alt="Muhammad Ilham Jagad"></div>
             <ul>
                 <li><a href="#home">Home</a></li>
                 <li><a href="#about">Tentang</a></li>
+                <li><a href="#projects">Proyek</a></li>
                 <li><a href="#services">Layanan</a></li>
                 <li><a href="#contact">Kontak</a></li>
             </ul>
@@ -366,108 +635,259 @@
 
     <!-- Hero Section -->
     <section class="hero" id="home">
-        <div class="hero-content">
-            <h1>Muhammad Ilham Jagad</h1>
-            <p class="subtitle">Welcome to my Portofolio Website😊</p>
-            
-            <div class="roles">
-                <div class="role-badge">🤖 AI Engineer</div>
-                <div class="role-badge">⚙️ Backend Development</div>
-                <div class="role-badge">📱 Mobile Development</div>
-            </div>
-
-            <div class="social-links">
-                <a href="https://www.instagram.com/ilhamjgad" target="_blank" class="social-link" title="Instagram">
-                    <span>📷</span>
-                </a>
-                 <a href="https://linkedin.com/in/ilhamjagad" target="_blank" class="social-link" title="LinkedIn">
-                    <span>💼</span>
-                </a>
-                <a href="https://github.com/ilhamjagad" target="_blank" class="social-link" title="GitHub">
-                    <span>💻</span>
-                </a>
+        <div class="container">
+            <div class="hero-content">
+                <h1>Muhammad Ilham Jagad</h1>
+                <p class="subtitle">AI Engineer | Backend Developer | Mobile Developer</p>
+                
                
-                <a href="mailto:ilhamjagad313@gmail.com" class="social-link" title="Email">
-                    <span>✉️</span>
-                </a>
+
+                <div class="cta-buttons">
+                    <a href="#projects" class="btn btn-primary">Lihat Proyek</a>
+                    <a href="#contact" class="btn btn-secondary">Hubungi Saya</a>
+                </div>
+
+                <div class="social-links">
+                    <a href="https://www.instagram.com/ilhamjgad" target="_blank" class="social-link" title="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://linkedin.com/in/ilhamjagad" target="_blank" class="social-link" title="LinkedIn">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="https://github.com/ilhamjagad" target="_blank" class="social-link" title="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="mailto:ilhamjagad313@gmail.com" class="social-link" title="Email">
+                        <i class="fas fa-envelope"></i>
+                    </a>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- About Section -->
-    <div class="container">
-        <section class="about" id="about">
-            <h2>Tentang Saya</h2>
-            <div class="about-content">
-                <div class="about-text">
-                    <p>Saya adalah seorang AI Engineer, Backend Developer, dan Mobile Developer yang berfokus pada pengembangan teknologi cerdas dan berdampak nyata. Berpengalaman dalam merancang sistem backend yang skalabel, membangun aplikasi mobile yang intuitif, serta menerapkan solusi berbasis AI untuk menyelesaikan masalah dunia nyata. Tujuan saya adalah menciptakan teknologi yang efisien, andal, dan berorientasi pada pengalaman pengguna, sekaligus terus mengeksplorasi inovasi baru untuk memberikan hasil yang bermakna.</p>
-                    <p style="margin-top: 1rem;">Sebagai AI Engineer, Backend Developer, dan Mobile Developer, saya terbiasa bekerja di berbagai lapisan teknologi mulai dari merancang arsitektur backend yang tangguh, mengembangkan aplikasi mobile yang responsif, hingga membangun solusi berbasis kecerdasan buatan. Saya percaya bahwa teknologi harus menjadi jembatan antara inovasi dan kebutuhan nyata, sehingga setiap proyek yang saya kerjakan berorientasi pada efisiensi, keandalan, dan pengalaman pengguna yang optimal. Komitmen saya adalah untuk terus belajar dan berkembang di era digital yang terus berubah.</p>
-                </div>
-                <div class="skills">
-                    <div class="skill-item">Python & Machine Learning</div>
-                    <div class="skill-item">SQL & NoSQL</div>
-                    <div class="skill-item">Flutter</div>
-                    <div class="skill-item">Database Design</div>
-                    <div class="skill-item">Cloud Services</div>
-                    <div class="skill-item">API Development</div>
-                </div>
-            </div>
-        </section>
-    </div>
-
-    <!-- Services Section -->
-    <section class="services" id="services">
+    <section class="about" id="about">
         <div class="container">
-            <h2>Layanan Saya</h2>
-            <div class="services-grid">
-                <div class="service-card">
-                    <div class="service-icon">🤖</div>
-                    <h3>AI Engineering</h3>
-                    <p>Mengembangkan solusi kecerdasan buatan yang canggih untuk mengotomatisasi proses bisnis dan meningkatkan efisiensi operasional.</p>
+            <h2 class="section-title">Tentang Saya</h2>
+            <div class="about-content">
+                <div class="about-text fade-in">
+                    <p>Saya adalah seorang AI Engineer, Backend Developer, dan Mobile Developer yang berfokus pada pengembangan teknologi cerdas dan berdampak nyata. Dengan pengalaman bertahun-tahun, saya telah membantu berbagai perusahaan mengembangkan solusi teknologi yang inovatif dan scalable.</p>
+                    <p>Berpengalaman dalam merancang sistem backend yang skalabel, membangun aplikasi mobile yang intuitif, serta menerapkan solusi berbasis AI untuk menyelesaikan masalah dunia nyata. Tujuan saya adalah menciptakan teknologi yang efisien, andal, dan berorientasi pada pengalaman pengguna.</p>
+                    <p>Komitmen saya adalah untuk terus belajar dan berkembang di era digital yang terus berubah, serta memberikan nilai tambah kepada setiap proyek yang saya tangani.</p>
                 </div>
-                <div class="service-card">
-                    <div class="service-icon">⚙️</div>
-                    <h3>Backend Development</h3>
-                    <p>Membangun infrastruktur backend yang robust dan scalable dengan teknologi terkini untuk mendukung aplikasi modern.</p>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">📱</div>
-                    <h3>Mobile Development</h3>
-                    <p>Mengembangkan aplikasi mobile yang responsif dan user-friendly untuk platform iOS dan Android.</p>
+                <div class="skills-grid fade-in">
+                    <div class="skill-card">Python & ML</div>
+                    <div class="skill-card">Node.js & Express</div>
+                    <div class="skill-card">React & React Native</div>
+                    <div class="skill-card">Flutter</div>
+                    <div class="skill-card">Database Design</div>
+                    <div class="skill-card">Cloud Services</div>
+                    <div class="skill-card">API Development</div>
+                    <div class="skill-card">DevOps</div>
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- Projects Section -->
+    <section class="projects" id="projects">
+        <div class="container">
+            <h2 class="section-title">Proyek Terbaru</h2>
+            <div class="projects-grid">
+                <div class="project-card fade-in">
+                    <div class="project-image">🤖</div>
+                    <div class="project-content">
+                        <h3>AI Chatbot System</h3>
+                        <p>Sistem chatbot berbasis AI dengan NLP untuk customer service otomatis yang dapat menangani ribuan percakapan simultan.</p>
+                        <div class="project-tags">
+                            <span class="tag">Python</span>
+                            <span class="tag">AI/ML</span>
+                            <span class="tag">NLP</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card fade-in">
+                    <div class="project-image">⚙️</div>
+                    <div class="project-content">
+                        <h3>E-Commerce App</h3>
+                        <p>Platform e-commerce sederhana dengan fitur Product Listing, Shopping Cart, Checkout Process, and Payment Gateaway</p>
+                        <div class="project-tags">
+                            <span class="tag">Flutter</span>
+                            <span class="tag">E-Commerce</span>
+                            <span class="tag">Mobile</span>
+                        </div>    
+                        
+                    </div>
+                </div>
+
+                <div class="project-card fade-in">
+                    <div class="project-image">📱</div>
+                    <div class="project-content">
+                        <h3>Fitness Tracking App</h3>
+                        <p>Aplikasi mobile untuk tracking fitness dengan fitur workout planning, progress monitoring, dan social sharing.</p>
+                        <div class="project-tags">
+                            <span class="tag">Flutter</span>
+                            <span class="tag">Firebase</span>
+                            <span class="tag">Mobile</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card fade-in">
+                    <div class="project-image">🎯</div>
+                    <div class="project-content">
+                        <h3>Data Analytics Dashboard</h3>
+                        <p>Dashboard analytics real-time dengan visualisasi data kompleks dan predictive analytics menggunakan machine learning.</p>
+                        <div class="project-tags">
+                            <span class="tag">React</span>
+                            <span class="tag">Python</span>
+                            <span class="tag">Analytics</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card fade-in">
+                    <div class="project-image">🌐</div>
+                    <div class="project-content">
+                        <h3>IoT Platform</h3>
+                        <p>Platform IoT untuk monitoring dan kontrol perangkat dengan real-time data streaming dan cloud integration.</p>
+                        <div class="project-tags">
+                            <span class="tag">IoT</span>
+                            <span class="tag">Cloud</span>
+                            <span class="tag">Backend</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services" id="services">
+        <div class="container">
+            <h2 class="section-title">Layanan Saya</h2>
+            <div class="services-grid">
+                <div class="service-card fade-in">
+                    <div class="service-icon">🤖</div>
+                    <h3>AI Engineering</h3>
+                    <p>Mengembangkan solusi kecerdasan buatan yang canggih untuk mengotomatisasi proses bisnis dan meningkatkan efisiensi operasional dengan machine learning dan deep learning.</p>
+                </div>
+
+                <div class="service-card fade-in">
+                    <div class="service-icon">⚙️</div>
+                    <h3>Backend Development</h3>
+                    <p>Membangun infrastruktur backend yang robust dan scalable dengan teknologi terkini untuk mendukung aplikasi modern dengan performa tinggi.</p>
+                </div>
+
+                <div class="service-card fade-in">
+                    <div class="service-icon">📱</div>
+                    <h3>Mobile Development</h3>
+                    <p>Mengembangkan aplikasi mobile yang responsif dan user-friendly untuk platform iOS dan Android dengan native dan cross-platform solutions.</p>
+                </div>
+
+                <div class="service-card fade-in">
+                    <div class="service-icon">☁️</div>
+                    <h3>Cloud Solutions</h3>
+                    <p>Implementasi dan optimasi cloud infrastructure menggunakan AWS, Google Cloud, atau Azure untuk skalabilitas dan reliability maksimal.</p>
+                </div>
+
+                <div class="service-card fade-in">
+                    <div class="service-icon">📊</div>
+                    <h3>Data Analytics</h3>
+                    <p>Analisis data mendalam dengan visualisasi yang menarik dan actionable insights untuk mendukung pengambilan keputusan bisnis yang lebih baik.</p>
+                </div>
+
+               
+            </div>
+        </div>
+    </section>
+
     <!-- Contact Section -->
-    <div class="container">
-        <section class="contact" id="contact">
-            <h2>Hubungi Saya</h2>
+    <section class="contact" id="contact">
+        <div class="container">
+            <h2 class="section-title" style="color: white;">Hubungi Saya</h2>
             <div class="contact-info">
-                <div class="contact-item">
+                <div class="contact-item fade-in">
                     <h3>📷 Instagram</h3>
                     <a href="https://instagram.com/ilhamjgad" target="_blank">@ilhamjgad</a>
                 </div>
-               
-                <div class="contact-item">
+                <div class="contact-item fade-in">
                     <h3>💼 LinkedIn</h3>
                     <a href="https://linkedin.com/in/ilhamjagad" target="_blank">Ilham Jagad</a>
                 </div>
-                <div class="contact-item">
+                <div class="contact-item fade-in">
                     <h3>💻 GitHub</h3>
                     <a href="https://github.com/ilhamjagad" target="_blank">@ilhamjagad</a>
                 </div>
-                 <div class="contact-item">
+                <div class="contact-item fade-in">
                     <h3>📧 Email</h3>
                     <a href="mailto:ilhamjagad313@gmail.com">ilhamjagad313@gmail.com</a>
                 </div>
             </div>
-        </section>
-    </div>
+        </div>
+    </section>
 
     <!-- Footer -->
     <footer>
         <p>&copy; 2025 Muhammad Ilham Jagad. Semua hak dilindungi.</p>
     </footer>
+
+    <!-- Scroll to Top Button -->
+    <button class="scroll-top" id="scrollTop">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script>
+        // Scroll to top functionality
+        const scrollTop = document.getElementById('scrollTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                scrollTop.classList.add('show');
+            } else {
+                scrollTop.classList.remove('show');
+            }
+        });
+
+        scrollTop.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Fade in animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 </html>
