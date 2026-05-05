@@ -148,7 +148,7 @@
             border: 1px solid var(--glass-border);
             box-shadow: 0 8px 32px var(--glass-shadow);
             border-radius: 24px;
-            transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease, transform 0.4s ease;
+            transition: all 0.4s ease;
         }
 
         .glass-pill {
@@ -1494,31 +1494,73 @@
         }
 
         if (msgDisplay) {
+            // Gunakan query sederhana agar tidak perlu index manual dan komentar lama tetap muncul
             const q = query(messagesCol, orderBy("timestamp", "desc"), limit(20));
+            
+            const isAdmin = new URLSearchParams(window.location.search).get('admin') === 'true';
+
             onSnapshot(q, (snapshot) => {
                 msgDisplay.innerHTML = "";
-                snapshot.forEach((doc) => {
-                    const data = doc.data();
+                
+                // Ambil semua data ke dalam array agar bisa di-sort di memori
+                const allMsgs = [];
+                snapshot.forEach(doc => {
+                    allMsgs.push({ id: doc.id, ...doc.data() });
+                });
+
+                // Sort: yang di-pin (true) di atas, sisanya di bawah
+                allMsgs.sort((a, b) => {
+                    const aPinned = a.pinned === true ? 1 : 0;
+                    const bPinned = b.pinned === true ? 1 : 0;
+                    return bPinned - aPinned; // 1 (pinned) akan di atas 0 (unpinned)
+                });
+
+                allMsgs.forEach((data) => {
+                    const msgId = data.id;
                     const date = data.timestamp ? data.timestamp.toDate() : new Date();
                     const timeStr = date.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
                     const dateStr = date.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
                     const fullTime = `${dateStr}, ${timeStr}`;
+                    const isPinned = data.pinned === true;
 
                     const msgDiv = document.createElement('div');
                     msgDiv.className = 'glass';
                     msgDiv.style.padding = '15px';
                     msgDiv.style.fontSize = '0.9rem';
                     msgDiv.style.borderRadius = '16px';
+                    msgDiv.style.position = 'relative';
+                    msgDiv.style.border = isPinned ? '2px solid var(--accent)' : '1px solid var(--glass-border)';
+
                     msgDiv.innerHTML = `
+                        ${isPinned ? '<div style="position:absolute; top:-10px; right:15px; background:var(--accent); color:white; font-size:0.7rem; padding:2px 8px; border-radius:10px; font-weight:bold;">📌 PINNED</div>' : ''}
                         <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
                             <strong>${data.nama}</strong>
                             <span style="font-size: 0.7rem; opacity: 0.7;">${fullTime}</span>
                         </div>
                         <p style="color: var(--text-muted);">${data.pesan}</p>
+                        ${isAdmin ? `
+                            <button onclick="window.togglePin('${msgId}', ${isPinned})" style="margin-top:10px; background:none; border:1px solid var(--accent); color:var(--accent); font-size:0.7rem; padding:2px 8px; border-radius:5px; cursor:pointer;">
+                                ${isPinned ? 'Unpin' : 'Pin Message'}
+                            </button>
+                        ` : ''}
                     `;
                     msgDisplay.appendChild(msgDiv);
                 });
             });
+
+            // Fungsi global untuk toggle pin (hanya aktif di mode admin)
+            if (isAdmin) {
+                import("https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js").then(mod => {
+                    window.togglePin = async (id, currentStatus) => {
+                        const docRef = mod.doc(db, "messages", id);
+                        try {
+                            await mod.updateDoc(docRef, { pinned: !currentStatus });
+                        } catch (e) {
+                            alert("Gagal update pin. Pastikan Rules Firestore mengizinkan update.");
+                        }
+                    };
+                });
+            }
         }
     
 
