@@ -388,22 +388,22 @@
             position: absolute;
             bottom: 40px;
             left: -30px;
-            padding: 15px 25px;
-            border-radius: 20px;
+            padding: 10px 20px;
+            border-radius: 18px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             --badge-scale: 1;
             animation: float-badge 4s ease-in-out infinite alternate;
         }
 
         .badge-icon {
-            font-size: 2rem;
+            font-size: 1.5rem;
         }
 
         .badge-text span {
             display: block;
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             color: var(--text-muted);
             font-weight: 600;
             text-transform: uppercase;
@@ -411,7 +411,7 @@
 
         .badge-text strong {
             font-family: 'Outfit';
-            font-size: 1.2rem;
+            font-size: 1rem;
         }
 
         /* ── STATS STRIP ── */
@@ -1302,13 +1302,8 @@
         const themeToggle = document.getElementById('theme-toggle');
         const html = document.documentElement;
 
-        // Apply theme early to avoid flash
-        const savedTheme = localStorage.getItem('theme');
-        
-        // Default to light mode (ignoring system/browser preferences)
-        if (savedTheme === 'dark') {
-            html.classList.add('dark');
-        }
+        // Tema default selalu terang (light mode) saat pertama kali dibuka.
+        html.classList.remove('dark');
 
         themeToggle.addEventListener('click', () => {
             const isDark = html.classList.toggle('dark');
