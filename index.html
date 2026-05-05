@@ -336,11 +336,14 @@
         .hero-text p.subtitle {
             font-size: 1.2rem;
             color: var(--text-muted);
-            margin-top: 1.5rem; /* Tambahkan jarak atas */
-            margin-bottom: 2.5rem; /* Tambahkan jarak bawah */
+            margin-top: 1.5rem;
+            /* Tambahkan jarak atas */
+            margin-bottom: 2.5rem;
+            /* Tambahkan jarak bawah */
             font-weight: 500;
             max-width: 90%;
-            text-align: left; /* Pastikan rata kiri */
+            text-align: left;
+            /* Pastikan rata kiri */
         }
 
         .hero-actions {
@@ -369,6 +372,8 @@
             position: relative;
             display: flex;
             justify-content: center;
+            perspective: 1000px;
+            z-index: 10;
         }
 
         .hero-image {
@@ -378,6 +383,13 @@
             object-fit: cover;
             border: 6px solid rgba(255, 255, 255, 0.2);
             box-shadow: 0 20px 40px var(--glass-shadow);
+            transition: transform 0.2s ease-out;
+            will-change: transform;
+        }
+
+        .hero-image-wrapper:hover .floating-badge {
+            transform: translateY(-10px) scale(1.1);
+            transition: transform 0.3s ease;
         }
 
         html.dark .hero-image {
@@ -766,10 +778,11 @@
         }
 
         /* ── FOOTER ── */
-        
+
         .footer-logo {
             font-family: 'Outfit', sans-serif;
-            font-weight: 900; /* Sangat Tebal */
+            font-weight: 900;
+            /* Sangat Tebal */
             font-size: 1.5rem;
             color: var(--text-main);
             margin-bottom: 0.5rem;
@@ -831,7 +844,8 @@
 
             .hero-text p.subtitle {
                 margin: 1.5rem auto 2.5rem;
-                text-align: left; /* Berubah dari justify ke kiri */
+                text-align: left;
+                /* Berubah dari justify ke kiri */
                 max-width: 100%;
             }
 
@@ -1018,7 +1032,7 @@
             background-color: var(--accent);
             -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
         }
-    
+
         #back-to-top {
             position: fixed;
             bottom: 30px;
@@ -1043,11 +1057,13 @@
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: 0 8px 32px var(--glass-shadow);
         }
+
         #back-to-top.visible {
             opacity: 1;
             visibility: visible;
             transform: translateY(0);
         }
+
         #back-to-top:hover {
             background: var(--accent);
             color: white;
@@ -1283,10 +1299,11 @@
     <footer class="glass glass-pill" style="width: 90%; max-width: 1000px; margin-left: auto; margin-right: auto;">
         <div class="footer-logo">Muhammad Ilham Jagad.</div>
         <p>Software Engineer & Cyber Security</p>
-        <p style="margin-top: 10px; font-size: 0.8rem;">© 2025 Copyright. Dibuat dengan ketelitian dan secangkir kopi.</p>
+        <p style="margin-top: 10px; font-size: 0.8rem;">© 2025 Copyright.<br> Dibuat dengan ketelitian dan secangkir kopi.
+        </p>
     </footer>
 
-    
+
     <button id="back-to-top" aria-label="Back to Top">↑</button>
     <script>
         // ── FORCE SCROLL TO TOP ON LOAD ──
@@ -1308,15 +1325,15 @@
         themeToggle.addEventListener('click', () => {
             const isDark = html.classList.toggle('dark');
             localStorage.setItem('theme', isDark ? 'dark' : 'light');
-            
+
             // Aggressive repaint trigger for mobile browsers
             // 1. Force reflow
             void html.offsetHeight;
-            
+
             // 2. Tiny scroll nudge to wake up the rendering engine (the ultimate fix for this bug)
             window.scrollBy(0, 1);
             window.scrollBy(0, -1);
-            
+
             // 3. Optional: slight delay for transitions to settle
             setTimeout(() => {
                 void html.offsetHeight;
@@ -1419,7 +1436,7 @@
                 });
             });
         }
-    
+
         // ── BACK TO TOP ──
         const btt = document.getElementById('back-to-top');
         if (btt) {
@@ -1432,6 +1449,30 @@
             });
             btt.addEventListener('click', () => {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        }
+
+        // ── EFEK MIRING FOTO PROFIL (3D TILT) ──
+        const profileContainer = document.querySelector('.hero-image-wrapper');
+        const profileImg = document.querySelector('.hero-image');
+        
+        if (profileContainer && profileImg) {
+            profileContainer.addEventListener('mousemove', (e) => {
+                const rect = profileContainer.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = ((y - centerY) / centerY) * 15; // Maksimal 15 derajat
+                const rotateY = ((centerX - x) / centerX) * 15;
+                
+                profileImg.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
+            });
+
+            profileContainer.addEventListener('mouseleave', () => {
+                profileImg.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
             });
         }
     </script>
@@ -1491,12 +1532,12 @@
         if (msgDisplay) {
             // Gunakan query sederhana agar tidak perlu index manual dan komentar lama tetap muncul
             const q = query(messagesCol, orderBy("timestamp", "desc"), limit(20));
-            
+
             const isAdmin = new URLSearchParams(window.location.search).get('admin') === 'true';
 
             onSnapshot(q, (snapshot) => {
                 msgDisplay.innerHTML = "";
-                
+
                 // Ambil semua data ke dalam array agar bisa di-sort di memori
                 const allMsgs = [];
                 snapshot.forEach(doc => {
@@ -1557,12 +1598,12 @@
                 });
             }
         }
-    
+
 
     </script>
 
 
-    
+
 </body>
 
 </html>
