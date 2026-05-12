@@ -801,6 +801,80 @@
             color: var(--text-muted);
         }
 
+        /* ── CERTIFICATE MODAL ── */
+        .cert-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .cert-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .cert-modal-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 85vh;
+            transform: scale(0.9);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .cert-modal.active .cert-modal-content {
+            transform: scale(1);
+        }
+
+        .cert-modal-content img {
+            width: 100%;
+            height: auto;
+            max-height: 85vh;
+            border-radius: 12px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            object-fit: contain;
+            display: block;
+        }
+
+        .cert-modal-close {
+            position: absolute;
+            top: -50px;
+            right: 0;
+            background: white;
+            color: black;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .cert-modal-close:hover {
+            transform: scale(1.1) rotate(90deg);
+            background: var(--accent);
+            color: white;
+        }
+
+        .hidden-cert {
+            display: none !important;
+        }
+
         /* ── REVEAL ANIMATION ── */
         .reveal {
             opacity: 0;
@@ -1087,6 +1161,7 @@
         <nav>
             <a href="#about">Tentang</a>
             <a href="#projects">Proyek</a>
+            <a href="#certificates">Sertifikat</a>
             <a href="#experience">Perjalanan</a>
             <a href="#contact" class="nav-contact-mobile">Hubungi Saya</a>
         </nav>
@@ -1133,7 +1208,7 @@
                 <div class="stat-label">Tahun Pengalaman</div>
             </div>
             <div class="stat-cell">
-                <div class="stat-num">3+</div>
+                <div class="stat-num">5+</div>
                 <div class="stat-label">Proyek Selesai</div>
             </div>
             <div class="stat-cell">
@@ -1182,6 +1257,23 @@
         </div>
         <div class="projects-grid" id="projects-grid">
             <!-- Injected via JS -->
+        </div>
+        <div id="view-all-projects-container" class="reveal" style="text-align: center; margin-top: 3rem;">
+            <button id="view-all-projects-btn" class="btn-outline" style="padding: 12px 30px; font-size: 0.9rem; cursor: pointer;">Lihat Seluruh Proyek →</button>
+        </div>
+    </section>
+
+    <!-- Certificates Section -->
+    <section id="certificates" class="page">
+        <div class="section-header reveal">
+            <p class="overline">Pencapaian</p>
+            <h2>Sertifikat</h2>
+        </div>
+        <div class="projects-grid" id="certificates-grid">
+            <!-- Injected via JS -->
+        </div>
+        <div id="view-all-certs-container" class="reveal" style="text-align: center; margin-top: 3rem;">
+            <button id="view-all-certs-btn" class="btn-outline" style="padding: 12px 30px; font-size: 0.9rem; cursor: pointer;">Lihat Seluruh Sertifikat →</button>
         </div>
     </section>
 
@@ -1286,7 +1378,7 @@
                         <textarea name="pesan" class="form-control" placeholder="Tuliskan pesan atau kesan Anda..."
                             required></textarea>
                     </div>
-                    <button type="submit" class="btn-primary btn-submit">Kirim Pesan Publik</button>
+                    <button type="submit" class="btn-primary btn-submit">Kirim Pesan</button>
                 </form>
             </div>
 
@@ -1305,6 +1397,14 @@
 
 
     <button id="back-to-top" aria-label="Back to Top">↑</button>
+
+    <!-- Certificate Modal -->
+    <div id="cert-modal" class="cert-modal" onclick="closeCertModal()">
+        <div class="cert-modal-content" onclick="event.stopPropagation()">
+            <span class="cert-modal-close" onclick="closeCertModal()">&times;</span>
+            <img id="cert-modal-img" src="" alt="Sertifikat Full">
+        </div>
+    </div>
     <script>
         // ── FORCE SCROLL TO TOP ON LOAD ──
         if (window.location.hash) {
@@ -1344,24 +1444,38 @@
         const skills = [
             { name: 'HTML, CSS, Javascript', pct: 90 },
             { name: 'Flutter / Kotlin', pct: 82 },
+            { name: 'MySQL', pct: 78 },
             { name: 'Python', pct: 85 },
             { name: 'Java', pct: 78 },
-            { name: 'MySQL', pct: 78 },
-            { name: 'REST API', pct: 85 }
+            { name: 'ReactJS', pct: 82 },
         ];
 
         const projects = [
             { title: 'CatatUangku!', desc: 'Aplikasi manajemen keuangan pribadi dengan Flutter dan Firebase sebagai database.', tags: ['Flutter', 'Firebase'], img: 'catatuangku.jpg', link: 'https://github.com/ilhamjagad/CatatUangku-MoneyTracker' },
 
-            { title: 'Kelana Shop', desc: 'Aplikasi E-Commerce mobile berbasis Flutter dengan fitur browse produk, keranjang belanja, dan proses checkout yang intuitif.', tags: ['Flutter', 'Firebase', 'REST API'], img: 'ecom.jpeg', link: '#projects' },
+            { title: 'BelanjaKu!', desc: 'Aplikasi E-Commerce mobile berbasis Flutter dengan fitur browse produk, keranjang belanja, dan proses checkout yang intuitif.', tags: ['Flutter', 'Firebase', 'REST API'], img: 'ecom.jpeg', link: '#projects' },
 
             { title: 'My Own Landing Page', desc: 'Landing page pribadi dengan desain yang modern dan responsif.', tags: ['HTML', 'CSS', 'Javascript'], img: 'landingpage.jpg', link: '#' }
         ];
 
-        const timeline = [
-            { type: 'work', year: '2025–Sekarang', title: 'Freelancer Mobile & Web Developer', place: 'Remote', desc: 'Mahasiswa yang aktif berkarya sebagai freelance mobile & web developer. Setiap proyek adalah kesempatan untuk belajar lebih dalam, dari wireframe hingga kode yang berjalan di tangan pengguna nyata.' },
+        const certificates = [
+            { title: 'Flutter Bootcamp 2025', issuer: 'UIN Jakarta', date: '2025', tags: ['Mobile & App Development'], img: 'sertif1.jpg', link: '#' },
 
-            { type: 'edu', year: '2025-Sekarang', title: 'Teknik Informatika', place: 'UIN Syarif Hidayatullah Jakarta', desc: 'Fokus pada pengembangan perangkat lunak dan keamanan siber.' },
+            { title: 'Android Class GDGoC UIN Jakarta', issuer: 'Google Developer Group on Campus UIN Jakarta', date: '2026', tags: ['Mobile & App Development'], img: 'sertif2.jpg', link: '#' },
+
+            { title: 'Belajar Dasar AI', issuer: 'Dicoding', date: '2025', tags: ['Python', 'Machine Learning'], img: 'sertif3.jpg', link: '#' },
+
+            { title: 'Overview of AI', issuer: 'Huawei ICT Academy', date: '2026', tags: ['Python', 'Machine Learning'], img: 'sertif4.jpg', link: '#' },
+
+            { title: 'Python Programming Basics', issuer: 'Huawei ICT Academy', date: '2026', tags: ['Python', 'Machine Learning'], img: 'sertif5.jpg', link: '#' },
+
+            
+        ];
+
+        const timeline = [
+            { type: 'work', year: '2025–Present', title: 'Freelancer Mobile & Web Developer', place: 'Remote', desc: 'Mengisi kegiatan sebagai freelance mobile & web developer disela-sela kuliah. Setiap proyek adalah kesempatan untuk belajar lebih dalam.' },
+
+            { type: 'edu', year: '2025-Present', title: 'S1 Teknik Informatika', place: 'UIN Syarif Hidayatullah Jakarta', desc: 'Fokus pada pengembangan perangkat lunak dan keamanan siber.' },
 
             { type: 'edu', year: '2020–2023', title: 'High School Diploma', place: 'Minhaajushshoobiriin Islamic Boarding School', desc: 'Siswa SMA sekaligus santri yang percaya bahwa menuntut ilmu tidak mengenal batas, baik ilmu dunia maupun akhirat.' }
         ];
@@ -1387,17 +1501,72 @@
 
 
         const pgEl = document.getElementById('projects-grid');
-        projects.forEach((p, idx) => {
-            const photoContent = p.img ? `<img src="${p.img}" alt="${p.title}" />` : `<div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.1);">No Image</div>`;
-            pgEl.innerHTML += `
-            <div class="project-card glass reveal" style="transition-delay: ${idx * 0.1}s">
-                <div class="project-photo">${photoContent}</div>
-                <div class="project-tags">${p.tags.map(t => `<span class="project-tag">${t}</span>`).join('')}</div>
-                <h3>${p.title}</h3>
-                <p>${p.desc}</p>
-                <a href="${p.link}" class="project-link">Lihat Detail →</a>
-            </div>`;
-        });
+        if (pgEl) {
+            projects.forEach((p, idx) => {
+                const isHidden = idx >= 3;
+                const photoContent = p.img ? `<img src="${p.img}" alt="${p.title}" />` : `<div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.1);">No Image</div>`;
+                pgEl.innerHTML += `
+                <div class="project-card glass reveal ${isHidden ? 'hidden-cert' : ''}" style="transition-delay: ${idx * 0.1}s">
+                    <div class="project-photo">${photoContent}</div>
+                    <div class="project-tags">${p.tags.map(t => `<span class="project-tag">${t}</span>`).join('')}</div>
+                    <h3>${p.title}</h3>
+                    <p>${p.desc}</p>
+                    <a href="${p.link}" class="project-link">Lihat Detail →</a>
+                </div>`;
+            });
+
+            // View all projects button logic
+            const viewAllProjectsBtn = document.getElementById('view-all-projects-btn');
+            const viewAllProjectsContainer = document.getElementById('view-all-projects-container');
+            if (viewAllProjectsBtn) {
+                viewAllProjectsBtn.addEventListener('click', () => {
+                    const hiddenProjs = pgEl.querySelectorAll('.hidden-cert');
+                    hiddenProjs.forEach(el => {
+                        el.classList.remove('hidden-cert');
+                        if (typeof obs !== 'undefined') {
+                            obs.observe(el);
+                        }
+                    });
+                    viewAllProjectsContainer.style.display = 'none';
+                });
+            }
+        }
+
+        const certEl = document.getElementById('certificates-grid');
+        if (certEl) {
+            certificates.forEach((c, idx) => {
+                const isHidden = idx >= 3;
+                const photoContent = c.img ? `<img src="${c.img}" alt="${c.title}" />` : `<div style="width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; background:rgba(0,0,0,0.05); color:var(--text-muted); font-size:0.8rem; text-align:center; padding:20px;"><span style="font-size:2rem; margin-bottom:10px;">📜</span>${c.title}</div>`;
+                certEl.innerHTML += `
+                <div class="project-card glass reveal ${isHidden ? 'hidden-cert' : ''}" style="transition-delay: ${idx * 0.1}s">
+                    <div class="project-photo">${photoContent}</div>
+                    <div class="project-tags">
+                        <span class="project-tag" style="background:var(--accent); color:white; border:none;">${c.date}</span>
+                        ${c.tags.map(t => `<span class="project-tag">${t}</span>`).join('')}
+                    </div>
+                    <h3>${c.title}</h3>
+                    <p>${c.issuer}</p>
+                    <a href="javascript:void(0)" class="project-link" onclick="openCertModal('${c.img}')">Lihat Sertifikat →</a>
+                </div>`;
+            });
+
+            // View all certificates button logic
+            const viewAllBtn = document.getElementById('view-all-certs-btn');
+            const viewAllContainer = document.getElementById('view-all-certs-container');
+            if (viewAllBtn) {
+                viewAllBtn.addEventListener('click', () => {
+                    const hiddenCerts = certEl.querySelectorAll('.hidden-cert');
+                    hiddenCerts.forEach(el => {
+                        el.classList.remove('hidden-cert');
+                        // Trigger reveal observer for the newly shown items
+                        if (typeof obs !== 'undefined') {
+                            obs.observe(el);
+                        }
+                    });
+                    viewAllContainer.style.display = 'none';
+                });
+            }
+        }
 
         const tmEl = document.getElementById('timeline');
         timeline.forEach((item, idx) => {
@@ -1474,6 +1643,21 @@
             profileContainer.addEventListener('mouseleave', () => {
                 profileImg.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
             });
+        }
+
+        // ── CERTIFICATE MODAL FUNCTIONS ──
+        function openCertModal(imgSrc) {
+            const modal = document.getElementById('cert-modal');
+            const modalImg = document.getElementById('cert-modal-img');
+            modalImg.src = imgSrc;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Prevent scroll
+        }
+
+        function closeCertModal() {
+            const modal = document.getElementById('cert-modal');
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto'; // Restore scroll
         }
     </script>
 
