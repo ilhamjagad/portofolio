@@ -861,7 +861,7 @@
             justify-content: center;
             font-size: 1.5rem;
             cursor: pointer;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
             transition: all 0.3s ease;
         }
 
@@ -1259,7 +1259,8 @@
             <!-- Injected via JS -->
         </div>
         <div id="view-all-projects-container" class="reveal" style="text-align: center; margin-top: 3rem;">
-            <button id="view-all-projects-btn" class="btn-outline" style="padding: 12px 30px; font-size: 0.9rem; cursor: pointer;">Lihat Seluruh Proyek →</button>
+            <button id="view-all-projects-btn" class="btn-outline"
+                style="padding: 12px 30px; font-size: 0.9rem; cursor: pointer;">Lihat Seluruh Proyek →</button>
         </div>
     </section>
 
@@ -1273,7 +1274,8 @@
             <!-- Injected via JS -->
         </div>
         <div id="view-all-certs-container" class="reveal" style="text-align: center; margin-top: 3rem;">
-            <button id="view-all-certs-btn" class="btn-outline" style="padding: 12px 30px; font-size: 0.9rem; cursor: pointer;">Lihat Seluruh Sertifikat →</button>
+            <button id="view-all-certs-btn" class="btn-outline"
+                style="padding: 12px 30px; font-size: 0.9rem; cursor: pointer;">Lihat Seluruh Sertifikat →</button>
         </div>
     </section>
 
@@ -1391,7 +1393,8 @@
     <footer class="glass glass-pill" style="width: 90%; max-width: 1000px; margin-left: auto; margin-right: auto;">
         <div class="footer-logo">Muhammad Ilham Jagad.</div>
         <p>Software Engineer & Cyber Security</p>
-        <p style="margin-top: 10px; font-size: 0.8rem;">© 2025 Copyright.<br> Dibuat dengan ketelitian dan secangkir kopi.
+        <p style="margin-top: 10px; font-size: 0.8rem;">© 2025 Copyright.<br> Dibuat dengan ketelitian dan secangkir
+            kopi.
         </p>
     </footer>
 
@@ -1459,17 +1462,19 @@
         ];
 
         const certificates = [
-            { title: 'Flutter Bootcamp 2025', issuer: 'UIN Jakarta', date: '2025', tags: ['Mobile & App Development'], img: 'sertif1.jpg', link: '#' },
 
-            { title: 'Android Class GDGoC UIN Jakarta', issuer: 'Google Developer Group on Campus UIN Jakarta', date: '2026', tags: ['Mobile & App Development'], img: 'sertif2.jpg', link: '#' },
+            { title: 'Web Dev 2.0', issuer: 'Google Developer on Campus UIN Jakarta', date: '2026', tags: ['Web Development'], img: 'sertif6.jpg', link: '#' },
+
+            { title: 'Flutter Bootcamp', issuer: 'HIMTI UIN Jakarta', date: '2025', tags: ['Mobile & App Development'], img: 'sertif1.jpg', link: '#' },
 
             { title: 'Belajar Dasar AI', issuer: 'Dicoding', date: '2025', tags: ['Python', 'Machine Learning'], img: 'sertif3.jpg', link: '#' },
+
+            { title: 'Android Class GDGoC UIN Jakarta', issuer: 'Google Developer Group on Campus UIN Jakarta', date: '2026', tags: ['Mobile & App Development'], img: 'sertif2.jpg', link: '#' },
 
             { title: 'Overview of AI', issuer: 'Huawei ICT Academy', date: '2026', tags: ['Python', 'Machine Learning'], img: 'sertif4.jpg', link: '#' },
 
             { title: 'Python Programming Basics', issuer: 'Huawei ICT Academy', date: '2026', tags: ['Python', 'Machine Learning'], img: 'sertif5.jpg', link: '#' },
 
-            
         ];
 
         const timeline = [
@@ -1624,19 +1629,19 @@
         // ── EFEK MIRING FOTO PROFIL (3D TILT) ──
         const profileContainer = document.querySelector('.hero-image-wrapper');
         const profileImg = document.querySelector('.hero-image');
-        
+
         if (profileContainer && profileImg) {
             profileContainer.addEventListener('mousemove', (e) => {
                 const rect = profileContainer.getBoundingClientRect();
                 const x = e.clientX - rect.left;
                 const y = e.clientY - rect.top;
-                
+
                 const centerX = rect.width / 2;
                 const centerY = rect.height / 2;
-                
+
                 const rotateX = ((y - centerY) / centerY) * 15; // Maksimal 15 derajat
                 const rotateY = ((centerX - x) / centerX) * 15;
-                
+
                 profileImg.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
             });
 
