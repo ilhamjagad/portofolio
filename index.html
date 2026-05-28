@@ -955,15 +955,16 @@
                 flex-direction: column;
                 position: absolute;
                 top: 100%;
-                left: 0;
+                left: auto;
                 right: 0;
+                width: 220px;
                 margin-top: 15px;
                 background: rgba(255, 255, 255, 0.92);
                 backdrop-filter: blur(24px);
                 -webkit-backdrop-filter: blur(24px);
                 border: 1px solid var(--glass-border);
-                border-radius: 24px;
-                padding: 10px;
+                border-radius: 20px;
+                padding: 8px;
                 box-shadow: 0 20px 40px var(--glass-shadow);
 
                 /* Animations */
@@ -972,7 +973,7 @@
                 transform: translateY(-15px) scale(0.95);
                 transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
                 pointer-events: none;
-                transform-origin: top center;
+                transform-origin: top right;
             }
 
             nav.mobile-active {
@@ -984,10 +985,10 @@
 
             nav a {
                 text-align: center;
-                padding: 14px;
-                font-size: 1rem;
+                padding: 12px;
+                font-size: 0.95rem;
                 width: 100%;
-                border-radius: 16px;
+                border-radius: 12px;
             }
 
             /* Hamburger Icon Animation */
@@ -1301,18 +1302,18 @@
     <header class="glass glass-pill">
         <a href="#" class="brand-logo">IlhamJagad.</a>
         <nav>
-            <a href="#about">Tentang</a>
-            <a href="#projects">Proyek</a>
-            <a href="#certificates">Sertifikat</a>
-            <a href="#experience">Perjalanan</a>
-            <a href="#contact" class="nav-contact-mobile">Hubungi Saya</a>
+            <a href="#about">About</a>
+            <a href="#projects">Project</a>
+            <a href="#certificates">Certificate</a>
+            <a href="#experience">Experience</a>
+            <a href="#contact" class="nav-contact-mobile">Contact Me</a>
         </nav>
         <div class="header-actions">
             <button id="theme-toggle" title="Ganti Tema">
                 <span class="icon-sun">☀️</span>
                 <span class="icon-moon">🌙</span>
             </button>
-            <a href="#contact" class="btn-primary desktop-only">Hubungi Saya</a>
+            <a href="#contact" class="btn-primary desktop-only">Contact Me</a>
             <button id="menu-toggle" class="mobile-only" aria-label="Menu">
                 <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"
                     stroke-linecap="round" stroke-linejoin="round" class="hamburger-icon">
@@ -1533,9 +1534,9 @@
 
 
     <footer class="glass glass-pill" style="width: 90%; max-width: 1000px; margin-left: auto; margin-right: auto;">
-        <div class="footer-logo">Muhammad Ilham Jagad.</div>
+        <div class="footer-logo">Muhammad Ilham Jagad</div>
         <p>Software Engineer & Cyber Security</p>
-        <p style="margin-top: 10px; font-size: 0.8rem;">© 2025 Copyright.<br> Dibuat dengan ketelitian dan secangkir
+        <p style="margin-top: 10px; font-size: 0.8rem;">©2025 Copyright<br> Dibuat dengan ketelitian dan secangkir
             kopi.
         </p>
     </footer>
@@ -1743,7 +1744,8 @@
         const menuToggle = document.getElementById('menu-toggle');
         const navMenu = document.querySelector('nav');
         if (menuToggle && navMenu) {
-            menuToggle.addEventListener('click', () => {
+            menuToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
                 navMenu.classList.toggle('mobile-active');
                 document.body.classList.toggle('mobile-active');
             });
@@ -1752,6 +1754,26 @@
                     navMenu.classList.remove('mobile-active');
                     document.body.classList.remove('mobile-active');
                 });
+            });
+
+            // Tutup menu saat klik di luar nav & tombol hamburger
+            document.addEventListener('click', (e) => {
+                if (navMenu.classList.contains('mobile-active') &&
+                    !navMenu.contains(e.target) &&
+                    !menuToggle.contains(e.target)) {
+                    navMenu.classList.remove('mobile-active');
+                    document.body.classList.remove('mobile-active');
+                }
+            });
+
+            // Tutup menu saat klik di luar (touch support)
+            document.addEventListener('touchstart', (e) => {
+                if (navMenu.classList.contains('mobile-active') &&
+                    !navMenu.contains(e.target) &&
+                    !menuToggle.contains(e.target)) {
+                    navMenu.classList.remove('mobile-active');
+                    document.body.classList.remove('mobile-active');
+                }
             });
         }
 
