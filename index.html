@@ -214,6 +214,12 @@
             background: rgba(0, 0, 0, 0.2);
         }
 
+        nav a.active {
+            background: var(--accent);
+            color: #ffffff;
+            font-weight: 600;
+        }
+
         .header-actions {
             display: flex;
             align-items: center;
@@ -1164,11 +1170,11 @@
                 z-index: 99999;
                 transform: translate(-50%, -50%);
                 transition: width 0.3s cubic-bezier(0.25, 1, 0.5, 1),
-                            height 0.3s cubic-bezier(0.25, 1, 0.5, 1),
-                            background 0.3s ease,
-                            opacity 0.3s ease;
+                    height 0.3s cubic-bezier(0.25, 1, 0.5, 1),
+                    background 0.3s ease,
+                    opacity 0.3s ease;
                 box-shadow: 0 0 12px var(--accent),
-                            0 0 24px rgba(37, 99, 235, 0.3);
+                    0 0 24px rgba(37, 99, 235, 0.3);
                 mix-blend-mode: normal;
                 will-change: transform;
             }
@@ -1185,11 +1191,11 @@
                 z-index: 99998;
                 transform: translate(-50%, -50%);
                 transition: width 0.4s cubic-bezier(0.25, 1, 0.5, 1),
-                            height 0.4s cubic-bezier(0.25, 1, 0.5, 1),
-                            border-color 0.4s ease,
-                            border-width 0.3s ease,
-                            opacity 0.4s ease,
-                            background 0.3s ease;
+                    height 0.4s cubic-bezier(0.25, 1, 0.5, 1),
+                    border-color 0.4s ease,
+                    border-width 0.3s ease,
+                    opacity 0.4s ease,
+                    background 0.3s ease;
                 opacity: 0.5;
                 will-change: transform;
             }
@@ -1199,7 +1205,7 @@
                 height: 14px;
                 background: var(--accent);
                 box-shadow: 0 0 20px var(--accent),
-                            0 0 40px rgba(37, 99, 235, 0.4);
+                    0 0 40px rgba(37, 99, 235, 0.4);
             }
 
             .cursor-ring.hovering {
@@ -1248,6 +1254,7 @@
                     opacity: 1;
                     transform: translate(-50%, -50%) scale(1);
                 }
+
                 100% {
                     opacity: 0;
                     transform: translate(-50%, -50%) scale(0);
@@ -1270,7 +1277,9 @@
         }
 
         /* Hide custom cursor on touch/mobile */
-        @media (pointer: coarse), (hover: none) {
+        @media (pointer: coarse),
+        (hover: none) {
+
             .cursor-dot,
             .cursor-ring,
             .cursor-particle,
@@ -1278,10 +1287,81 @@
                 display: none !important;
             }
         }
+
+        /* ── SPLASH SCREEN ── */
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: var(--bg-color);
+            z-index: 999999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.8s cubic-bezier(0.77, 0, 0.175, 1), visibility 0.8s;
+            overflow: hidden;
+        }
+
+        #splash-screen.fade-out {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        #splash-text-container {
+            text-align: center;
+            perspective: 1000px;
+        }
+
+        #splash-text {
+            font-family: 'Outfit', sans-serif;
+            font-size: clamp(3rem, 12vw, 7.5rem);
+            font-weight: 900;
+            color: var(--text-main);
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(40px) rotateX(-20deg);
+            transition: opacity 0.3s cubic-bezier(0.25, 1, 0.5, 1), transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            letter-spacing: -0.03em;
+        }
+
+        #splash-text.active {
+            opacity: 1;
+            transform: translateY(0) rotateX(0deg);
+            background: linear-gradient(135deg, #3b82f6 0%, #eab308 50%, #ec4899 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        html.dark #splash-text.active {
+            background: linear-gradient(135deg, #38bdf8 0%, #fef08a 50%, #fbcfe8 100%);
+        }
+
+        #splash-text.exit {
+            opacity: 0;
+            transform: translateY(-40px) rotateX(20deg);
+        }
     </style>
 </head>
 
 <body>
+    <!-- Splash Screen -->
+    <div id="splash-screen">
+        <!-- Splash Background Blobs -->
+        <div class="bg-blobs" style="z-index: 1;">
+            <div class="blob blob-1"></div>
+            <div class="blob blob-2"></div>
+            <div class="blob blob-3"></div>
+        </div>
+        <div id="splash-text-container" style="position: relative; z-index: 2;">
+            <span id="splash-text"></span>
+        </div>
+    </div>
+
     <!-- Custom Cursor -->
     <div class="cursor-dot" id="cursor-dot"></div>
     <div class="cursor-ring" id="cursor-ring"></div>
@@ -1552,6 +1632,54 @@
         </div>
     </div>
     <script>
+        // ── SPLASH SCREEN SCRIPT ──
+        (function() {
+            const words = ["Halo", "Hello", "Hola", "Bonjour", "Ciao", "こんにちは", "안녕하세요", "你好", "مرحباً"];
+            const splashScreen = document.getElementById('splash-screen');
+            const splashText = document.getElementById('splash-text');
+            if (!splashScreen || !splashText) return;
+
+            // Prevent scrolling during splash
+            document.body.style.overflow = 'hidden';
+            
+            let idx = 0;
+            function showNext() {
+                if (idx < words.length) {
+                    // Reset to initial position without transition
+                    splashText.style.transition = 'none';
+                    splashText.className = '';
+                    void splashText.offsetWidth; // Force reflow
+                    
+                    // Re-enable transition and animate
+                    splashText.style.transition = '';
+                    splashText.textContent = words[idx];
+                    splashText.className = 'active';
+                    
+                    setTimeout(() => {
+                        splashText.className = 'exit';
+                        idx++;
+                        setTimeout(showNext, 180);
+                    }, 300);
+                } else {
+                    splashScreen.classList.add('fade-out');
+                    document.body.style.overflow = '';
+                    
+                    // Trigger IntersectionObserver for items visible in viewport
+                    setTimeout(() => {
+                        splashScreen.style.display = 'none';
+                        document.querySelectorAll('.reveal').forEach(el => {
+                            const rect = el.getBoundingClientRect();
+                            if (rect.top < window.innerHeight) {
+                                el.classList.add('visible');
+                            }
+                        });
+                    }, 800);
+                }
+            }
+            // Small initial delay
+            setTimeout(showNext, 200);
+        })();
+
         // ── FORCE SCROLL TO TOP ON LOAD ──
         if (window.location.hash) {
             window.history.replaceState(null, null, window.location.pathname);
@@ -1792,6 +1920,31 @@
             });
         }
 
+        // ── SCROLLSPY (ACTIVE NAV LINK HIGHLIGHT) ──
+        const spySections = document.querySelectorAll('section[id]');
+        const spyLinks = document.querySelectorAll('nav a');
+
+        window.addEventListener('scroll', () => {
+            let currentSectionId = '';
+            const scrollPos = window.scrollY + 200; // offset for nav header height
+
+            spySections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.offsetHeight;
+                if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
+                    currentSectionId = section.getAttribute('id');
+                }
+            });
+
+            spyLinks.forEach(link => {
+                link.classList.remove('active');
+                const href = link.getAttribute('href');
+                if (href === `#${currentSectionId}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
         // ── EFEK MIRING FOTO PROFIL (3D TILT) ──
         const profileContainer = document.querySelector('.hero-image-wrapper');
         const profileImg = document.querySelector('.hero-image');
@@ -1832,7 +1985,7 @@
         }
 
         // ── CUSTOM CURSOR ANIMATION ──
-        (function() {
+        (function () {
             // Skip on touch devices
             if (window.matchMedia('(pointer: coarse)').matches) return;
 
