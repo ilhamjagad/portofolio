@@ -881,6 +881,23 @@
             display: none !important;
         }
 
+        /* ── STAGGER POP UP ANIMATION FOR UNHIDDEN ITEMS ── */
+        @keyframes cardFadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .show-cert-animate {
+            animation: cardFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
         /* ── REVEAL ANIMATION ── */
         .reveal {
             opacity: 0;
@@ -1170,7 +1187,8 @@
                 z-index: 99999;
                 transform: translate(-50%, -50%);
                 transition: width 0.2s ease, height 0.2s ease, background 0.2s;
-                border-radius: 0; /* Sengaja dibuat kotak tajam */
+                border-radius: 0;
+                /* Sengaja dibuat kotak tajam */
                 box-shadow: 0 0 8px var(--accent);
             }
 
@@ -1184,9 +1202,9 @@
                 pointer-events: none;
                 z-index: 99998;
                 transform: translate(-50%, -50%);
-                transition: width 0.3s cubic-bezier(0.25, 1, 0.5, 1), 
-                            height 0.3s cubic-bezier(0.25, 1, 0.5, 1), 
-                            opacity 0.3s;
+                transition: width 0.3s cubic-bezier(0.25, 1, 0.5, 1),
+                    height 0.3s cubic-bezier(0.25, 1, 0.5, 1),
+                    opacity 0.3s;
                 opacity: 0.7;
                 border: none;
                 /* Trik membuat siku-siku (brackets) di keempat sudut menggunakan gradient */
@@ -1223,14 +1241,22 @@
             }
 
             @keyframes cyber-scan {
-                0% { transform: translate(-50%, -50%) rotate(0deg); }
-                100% { transform: translate(-50%, -50%) rotate(180deg); } /* Berputar setengah putaran terus menerus */
+                0% {
+                    transform: translate(-50%, -50%) rotate(0deg);
+                }
+
+                100% {
+                    transform: translate(-50%, -50%) rotate(180deg);
+                }
+
+                /* Berputar setengah putaran terus menerus */
             }
 
             /* ── EFEK KLIK ── */
             .cursor-dot.clicking {
                 width: 20px;
-                height: 2px; /* Berubah menjadi garis terminal statis saat ditekan */
+                height: 2px;
+                /* Berubah menjadi garis terminal statis saat ditekan */
             }
 
             .cursor-ring.clicking {
@@ -1247,7 +1273,8 @@
             .cursor-particle {
                 position: fixed;
                 width: 6px;
-                height: 2px; /* Partikel kotak memanjang */
+                height: 2px;
+                /* Partikel kotak memanjang */
                 background: var(--accent);
                 pointer-events: none;
                 z-index: 99997;
@@ -1256,8 +1283,15 @@
             }
 
             @keyframes cursor-particle-burst {
-                0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-                100% { opacity: 0; transform: translate(-50%, -50%) scale(0); }
+                0% {
+                    opacity: 1;
+                    transform: translate(-50%, -50%) scale(1);
+                }
+
+                100% {
+                    opacity: 0;
+                    transform: translate(-50%, -50%) scale(0);
+                }
             }
 
             /* ── JEJAK (TRAIL) KURSOR ── */
@@ -1269,14 +1303,17 @@
                 pointer-events: none;
                 z-index: 99996;
                 opacity: 0;
-                border-radius: 0; /* Mengubah jejak menjadi pixel tajam */
+                border-radius: 0;
+                /* Mengubah jejak menjadi pixel tajam */
                 transform: translate(-50%, -50%);
                 will-change: transform, opacity;
             }
         }
 
         /* Sembunyikan di Layar Sentuh */
-        @media (pointer: coarse), (hover: none) {
+        @media (pointer: coarse),
+        (hover: none) {
+
             .cursor-dot,
             .cursor-ring,
             .cursor-particle,
@@ -1284,7 +1321,7 @@
                 display: none !important;
             }
         }
-        
+
         /* ── SPLASH SCREEN ── */
         #splash-screen {
             position: fixed;
@@ -1630,7 +1667,7 @@
     </div>
     <script>
         // ── SPLASH SCREEN SCRIPT ──
-        (function() {
+        (function () {
             const words = ["Halo", "Hello", "Hola", "Bonjour", "Ciao", "こんにちは", "안녕하세요", "你好", "مرحباً"];
             const splashScreen = document.getElementById('splash-screen');
             const splashText = document.getElementById('splash-text');
@@ -1638,7 +1675,7 @@
 
             // Prevent scrolling during splash
             document.body.style.overflow = 'hidden';
-            
+
             let idx = 0;
             function showNext() {
                 if (idx < words.length) {
@@ -1646,12 +1683,12 @@
                     splashText.style.transition = 'none';
                     splashText.className = '';
                     void splashText.offsetWidth; // Force reflow
-                    
+
                     // Re-enable transition and animate
                     splashText.style.transition = '';
                     splashText.textContent = words[idx];
                     splashText.className = 'active';
-                    
+
                     setTimeout(() => {
                         splashText.className = 'exit';
                         idx++;
@@ -1660,7 +1697,7 @@
                 } else {
                     splashScreen.classList.add('fade-out');
                     document.body.style.overflow = '';
-                    
+
                     // Trigger IntersectionObserver for items visible in viewport
                     setTimeout(() => {
                         splashScreen.style.display = 'none';
@@ -1796,8 +1833,10 @@
             if (viewAllProjectsBtn) {
                 viewAllProjectsBtn.addEventListener('click', () => {
                     const hiddenProjs = pgEl.querySelectorAll('.hidden-cert');
-                    hiddenProjs.forEach(el => {
+                    hiddenProjs.forEach((el, index) => {
                         el.classList.remove('hidden-cert');
+                        el.classList.add('show-cert-animate');
+                        el.style.animationDelay = `${index * 0.1}s`;
                         if (typeof obs !== 'undefined') {
                             obs.observe(el);
                         }
@@ -1831,8 +1870,10 @@
             if (viewAllBtn) {
                 viewAllBtn.addEventListener('click', () => {
                     const hiddenCerts = certEl.querySelectorAll('.hidden-cert');
-                    hiddenCerts.forEach(el => {
+                    hiddenCerts.forEach((el, index) => {
                         el.classList.remove('hidden-cert');
+                        el.classList.add('show-cert-animate');
+                        el.style.animationDelay = `${index * 0.1}s`;
                         // Trigger reveal observer for the newly shown items
                         if (typeof obs !== 'undefined') {
                             obs.observe(el);
