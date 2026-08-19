@@ -2286,7 +2286,7 @@
                     const msgId = data.id;
                     const date = data.timestamp ? data.timestamp.toDate() : new Date();
                     const timeStr = date.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
-                    const dateStr = date.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
+                    const dateStr = date.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
                     const fullTime = `${dateStr}, ${timeStr}`;
                     const isPinned = data.pinned === true;
 
@@ -2332,29 +2332,9 @@
 
 
         // ── VIEW COUNTER ──
-        (async function () {
+        (function () {
             const el = document.getElementById('view-count');
-            if (!el) return;
-            try {
-                const res = await fetch('https://hits.sh/portofolio-ilhamjagad.vercel.app.svg', { cache: 'no-store' });
-                if (!res.ok) throw new Error('fetch failed');
-                const svgText = await res.text();
-                // Parse SVG dengan DOMParser untuk mendapatkan angka kunjungan
-                const parser = new DOMParser();
-                const svgDoc = parser.parseFromString(svgText, 'image/svg+xml');
-                const textEls = svgDoc.querySelectorAll('text');
-                let count = null;
-                textEls.forEach(t => {
-                    const val = t.textContent.trim().replace(/,/g, '');
-                    if (/^\d+$/.test(val)) count = t.textContent.trim();
-                });
-                if (count) {
-                    el.textContent = count;
-                } else {
-                    throw new Error('count not found');
-                }
-            } catch (e) {
-                // Fallback: tampilkan badge img jika fetch gagal (CORS, dll)
+            if (el) {
                 el.innerHTML = '<img src="https://hits.sh/portofolio-ilhamjagad.vercel.app.svg?style=flat&label=Total&color=1e293b&labelColor=2563eb" alt="Views" style="height:18px; border-radius:3px; vertical-align:middle;"/>';
             }
         })();
