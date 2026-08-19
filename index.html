@@ -34,6 +34,7 @@
             --blob-1: #bfdbfe;
             --blob-2: #fef08a;
             --blob-3: #fbcfe8;
+            --counter-filter: invert(1);
         }
 
         /* ── DARK MODE (Liquid Glass) ── */
@@ -48,6 +49,7 @@
             --blob-1: #1e3a8a;
             --blob-2: #1e1b4b;
             --blob-3: #4c1d95;
+            --counter-filter: none;
         }
 
         html {
@@ -413,6 +415,15 @@
             gap: 8px;
             --badge-scale: 1;
             animation: float-badge 4s ease-in-out infinite alternate;
+        }
+
+        .floating-badge.badge-top-right {
+            top: 40px;
+            bottom: auto;
+            left: auto;
+            right: -30px;
+            animation-delay: 1s;
+            transform-origin: right top;
         }
 
         .badge-icon {
@@ -1095,6 +1106,15 @@
                 --badge-scale: 0.7;
                 transform-origin: left bottom;
             }
+
+            .floating-badge.badge-top-right {
+                top: 20px;
+                bottom: auto;
+                left: auto;
+                right: -5px;
+                --badge-scale: 0.7;
+                transform-origin: right top;
+            }
         }
 
         #messages-display {
@@ -1449,11 +1469,20 @@
             </div>
             <div class="hero-image-wrapper reveal" style="transition-delay: 0.2s">
                 <img src="prof.jpeg" alt="Ilham Jagad" class="hero-image">
+                <!-- Status Badge (Kiri Bawah) -->
                 <div class="floating-badge glass">
                     <div class="badge-icon">🚀</div>
                     <div class="badge-text">
                         <span>Status Saat Ini</span>
                         <strong>Open to Work</strong>
+                    </div>
+                </div>
+                <!-- Views Counter Badge (Kanan Atas) -->
+                <div class="floating-badge badge-top-right glass">
+                    <div class="badge-icon">👁️</div>
+                    <div class="badge-text">
+                        <span>Views</span>
+                        <strong id="view-count" style="font-family: 'Outfit'; font-size: 1rem;">...</strong>
                     </div>
                 </div>
             </div>
@@ -1647,10 +1676,11 @@
     </section>
 
 
+
     <footer class="glass glass-pill" style="width: 90%; max-width: 1000px; margin-left: auto; margin-right: auto;">
         <div class="footer-logo">Muhammad Ilham Jagad</div>
         <p>Software Engineer & Cyber Security</p>
-        <p style="margin-top: 10px; font-size: 0.8rem;">©2025 Copyright<br> Dibuat dengan ketelitian dan secangkir
+        <p style="margin-top: 10px; font-size: 0.8rem;">©2025Copyright.<br> Dibuat dengan ketelitian dan secangkir
             kopi.
         </p>
     </footer>
@@ -2300,6 +2330,34 @@
             }
         }
 
+
+        // ── VIEW COUNTER ──
+        (async function () {
+            const el = document.getElementById('view-count');
+            if (!el) return;
+            try {
+                const res = await fetch('https://hits.sh/portofolio-ilhamjagad.vercel.app.svg', { cache: 'no-store' });
+                if (!res.ok) throw new Error('fetch failed');
+                const svgText = await res.text();
+                // Parse SVG dengan DOMParser untuk mendapatkan angka kunjungan
+                const parser = new DOMParser();
+                const svgDoc = parser.parseFromString(svgText, 'image/svg+xml');
+                const textEls = svgDoc.querySelectorAll('text');
+                let count = null;
+                textEls.forEach(t => {
+                    const val = t.textContent.trim().replace(/,/g, '');
+                    if (/^\d+$/.test(val)) count = t.textContent.trim();
+                });
+                if (count) {
+                    el.textContent = count;
+                } else {
+                    throw new Error('count not found');
+                }
+            } catch (e) {
+                // Fallback: tampilkan badge img jika fetch gagal (CORS, dll)
+                el.innerHTML = '<img src="https://hits.sh/portofolio-ilhamjagad.vercel.app.svg?style=flat&label=Total&color=1e293b&labelColor=2563eb" alt="Views" style="height:18px; border-radius:3px; vertical-align:middle;"/>';
+            }
+        })();
 
     </script>
 
