@@ -1546,7 +1546,7 @@
         </div>
         <div id="view-all-projects-container" class="reveal" style="text-align: center; margin-top: 3rem;">
             <button id="view-all-projects-btn" class="btn-outline"
-                style="padding: 12px 30px; font-size: 0.9rem; cursor: pointer;">Lihat Seluruh Proyek →</button>
+                style="padding: 12px 30px; font-size: 0.9rem; cursor: pointer;">Lihat Seluruh Proyek</button>
         </div>
     </section>
 
@@ -1561,7 +1561,7 @@
         </div>
         <div id="view-all-certs-container" class="reveal" style="text-align: center; margin-top: 3rem;">
             <button id="view-all-certs-btn" class="btn-outline"
-                style="padding: 12px 30px; font-size: 0.9rem; cursor: pointer;">Lihat Seluruh Sertifikat →</button>
+                style="padding: 12px 30px; font-size: 0.9rem; cursor: pointer;">Lihat Seluruh Sertifikat</button>
         </div>
     </section>
 
@@ -1855,7 +1855,7 @@
                     <div class="project-tags">${p.tags.map(t => `<span class="project-tag">${t}</span>`).join('')}</div>
                     <h3>${p.title}</h3>
                     <p>${p.desc}</p>
-                    <a href="${p.link}" class="project-link">Lihat Detail →</a>
+                    <a href="${p.link}" class="project-link">Lihat Detail</a>
                 </div>`;
             });
 
@@ -1892,7 +1892,7 @@
                     </div>
                     <h3>${c.title}</h3>
                     <p>${c.issuer}</p>
-                    <a href="javascript:void(0)" class="project-link" onclick="openCertModal('${c.img}')">Lihat Sertifikat →</a>
+                    <a href="javascript:void(0)" class="project-link" onclick="openCertModal('${c.img}')">Lihat Sertifikat</a>
                 </div>`;
             });
 
